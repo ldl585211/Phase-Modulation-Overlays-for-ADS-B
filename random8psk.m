@@ -16,15 +16,16 @@ symbols = bits(:,1)*4 + bits(:,2)*2 + bits(:,3);
 theta = 2*pi*symbols/M;
 tx = exp(1j*theta);
 
-snr_dB = 0:2:20;
-ber = zeros(size(snr_dB));
+EbN0_dB = 0:2:20;
 
-for n = 1:length(snr_dB)
+for n = 1:length(EbN0_dB)
 
-    snr = 10^(snr_dB(n)/10);
+    EbN0 = 10^(EbN0_dB(n)/10);
+
+    EsN0 = k * EbN0;
 
     % noise variance
-    sigma = sqrt(1/(2*snr));
+    sigma = sqrt(1/(2*EsN0));
 
     noise = sigma*(randn(size(tx)) + 1j*randn(size(tx)));
 
@@ -51,8 +52,9 @@ for n = 1:length(snr_dB)
 end
 
 % -------- Plot --------
-semilogy(snr_dB,ber,'-o','LineWidth',2)
+semilogy(EbN0_dB, ber, '-o', 'LineWidth', 2)
+
 grid on
-xlabel('SNR (dB)')
-ylabel('BER')
-title('8PSK BER')
+xlabel('E_b/N_0 (dB)')
+ylabel('Bit Error Rate (BER)')
+title('8PSK BER vs E_b/N_0')
